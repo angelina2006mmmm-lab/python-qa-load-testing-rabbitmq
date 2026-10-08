@@ -1,0 +1,62 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    environment:
+      RABBITMQ_DEFAULT_USER: demo
+      RABBITMQ_DEFAULT_PASS: demo
+    ports:
+      - "127.0.0.1:15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [testnet]
+
+  api:
+    build: .
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment: &service-env
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: demo
+      RABBITMQ_PASSWORD: demo
+      QUEUE_NAME: premium_notifications
+      SQLITE_PATH: /data/jobs.db
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - jobdata:/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks: [testnet]
+
+  worker:
+    build: .
+    command: ["python", "-m", "worker.main"]
+    environment: *service-env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - jobdata:/data
+    networks: [testnet]
+
+  locust:
+    build:
+      context: .
+      dockerfile: Dockerfile.locust
+    profiles: [load]
+    command: ["-f", "/workspace/loadtest/locustfile.py", "--host", "http://api:8000", "--web-host", "0.0.0.0"]
+    depends_on: [api]
+    ports:
+      - "127.0.0.1:8089:8089"
+    volumes:
+      - ./reports:/reports
+    networks: [testnet]
+
+volumes:
+  jobdata:
+
+networks:
+  testnet:
