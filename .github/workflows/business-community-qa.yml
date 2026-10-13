@@ -1,0 +1,22 @@
+name: Business Community QA lab — 20 HTTP tests
+on:
+  push:
+    paths:
+      - 'extensions/business-community-qa-lab/**'
+      - '.github/workflows/business-community-qa.yml'
+  workflow_dispatch:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: extensions/business-community-qa-lab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install
+        run: python -m pip install -r requirements.txt
+      - name: Run API integration checks
+        run: python -m pytest -q tests/

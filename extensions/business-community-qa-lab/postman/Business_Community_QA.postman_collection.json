@@ -1,0 +1,76 @@
+{
+  "info": {
+    "name": "Business Community QA Lab",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Get feed",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/v1/posts?page=1&size=1"
+      }
+    },
+    {
+      "name": "Create post",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/v1/posts",
+        "header": [
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\":\"Новые партнёры\",\"body\":\"Ищу поставщика\"}"
+        }
+      }
+    },
+    {
+      "name": "Forbidden delete",
+      "request": {
+        "method": "DELETE",
+        "url": "{{baseUrl}}/v1/posts/2",
+        "header": [
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Invalid create",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/v1/posts",
+        "header": [
+          {
+            "key": "X-User-Id",
+            "value": "1"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\":\"a\",\"body\":\"\"}"
+        }
+      }
+    }
+  ]
+}
