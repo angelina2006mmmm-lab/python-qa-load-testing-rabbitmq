@@ -1,5 +1,12 @@
 # Premium Notifications Lab — Python QA, RabbitMQ, Locust
 
+## Дополнительный QA-проект: Business Community QA Lab
+
+[Учебное тестирование сообщества предпринимателей — 20 REST API интеграционных тестов, web/mobile чек-листы, Postman, SQL и баг-репорт](extensions/business-community-qa-lab/README.md).
+
+[Успешный запуск GitHub Actions](https://github.com/angelina2006mmmm-lab/python-qa-load-testing-rabbitmq/actions/runs/38375494828). Используются только синтетические данные и независимый API-мок, **не система СберБизнес**. Web/mobile сценарии представлены как непроведённые тесты.
+
+
 Учебный pet-проект для портфолио QA Automation (Python). **Не связан с МТС и не использует реальные клиентские данные.** Демонстрирует тестирование REST API, работу с брокером RabbitMQ и запуск нагрузочных сценариев в Locust.
 
 ## Стек
